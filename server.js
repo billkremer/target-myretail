@@ -12,14 +12,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 routes(app); // call the routes and send the app.
 
 /** --- MONGOOSE CONNECTION --- **/
-mongoose.connect('mongodb://localhost:27017/myretail', { useNewUrlParser: true });
+var test = process.env.MONGODB_URI || 'mongodb://localhost:27017/myretail'
+mongoose.connect(test, { useNewUrlParser: true });
 
 mongoose.connection.on('connected', function () {
   console.log('Sweet connected to database');
 });
 
 mongoose.connection.on('error', function () {
-  console.log('Bad not connected to database');
+  console.log('Bad not connected to database', test);
 });
 
 // /** -- ROUTES -- **/
