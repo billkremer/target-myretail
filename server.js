@@ -11,27 +11,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 routes(app); // call the routes and send the app.
 
 /** --- MONGOOSE CONNECTION --- **/
-var mongo_uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/myretail'
-mongoose.connect(mongo_uri, { useNewUrlParser: true });
+app.set('mongo_uri', process.env.MONGODB_URI || 'mongodb://localhost:27017/myretail');
+mongoose.connect(app.get('mongo_uri'), { useNewUrlParser: true });
 
-// mongoose.connection.on('connected', function () {
-//   console.log('Sweet connected to database', mongo_uri);
-// });
-
-// mongoose.connection.on('error', function () {
-//   console.log('Bad not connected to database', mongo_uri);
-// });
-
-// /** -- ROUTES -- **/
-// app.use(express.static('public'));
-// app.use('/product', product);
-
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'public', 'views', 'index.html'));
-// });
-
-app.set('port', process.env.PORT || 3000); // use the .env file if present
+app.set('port', process.env.PORT || 3000); 
 
 app.listen(app.get('port'), function (req, res) {
-  console.log('Now listening on port:', app.get('port'), "\nuse Ctrl+C to quit");
+  console.log('Now listening on port:', app.get('port'), "\nIf running locally, use Ctrl+C to quit");
 });

@@ -3,7 +3,7 @@ module.exports = function (app) {
   var Product = require('../model/product');
 
   app.get('/products/:product_id', function (req, res) {
-    console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id) );
+
 
     if (parseInt(req.params.product_id) != req.params.product_id) {
       res.status('404').send('Product Id: ' + req.params.product_id + ' is not valid. Please check documentation.');
@@ -30,9 +30,10 @@ module.exports = function (app) {
   // @TODO: Complete this route
   app.put('/products/:product_id', function (req, res) {
     var product_id = req.params.product_id;
-    console.log('inapp.get');
+    console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id));
 
     console.log('id received - put', id);
+    
     Product.findOneAndUpdate({id: product_id}, function (err, product) {
       if (err) {
         res.sendStatus(500);
