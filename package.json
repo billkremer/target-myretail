@@ -1,0 +1,28 @@
+{
+  "name": "my-retail",
+  "version": "1.0.0",
+  "description": "myRetail RESTful service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/billkremer/target-myretail.git"
+  },
+  "keywords": [
+    "REST"
+  ],
+  "author": "Bill Kremer <bill.kremer.dev@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/billkremer/target-myretail/issues"
+  },
+  "homepage": "https://github.com/billkremer/target-myretail#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.14"
+  }
+}
