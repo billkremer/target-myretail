@@ -3,8 +3,6 @@ module.exports = function (app) {
   var Product = require('../model/product');
 
   app.get('/products/:product_id', function (req, res) {
-
-
     if (parseInt(req.params.product_id) != req.params.product_id) {
       res.status('404').send('Product Id: ' + req.params.product_id + ' is not valid. Please check documentation.');
       return;
@@ -19,7 +17,12 @@ module.exports = function (app) {
         res.status('404').send('Product: ' + req.params.product_id + ' not found.');
         return;
       } // null == undefined
-      res.send(product);
+
+      product_to_send = { "id": product.id,
+                          "name": product.name,
+                          "current_price": product.current_price
+                        }; // reorders the parameters as requested by client
+      res.send(product_to_send);
     });
 
   });
@@ -33,7 +36,7 @@ module.exports = function (app) {
     console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id));
 
     console.log('id received - put', id);
-    
+
     Product.findOneAndUpdate({id: product_id}, function (err, product) {
       if (err) {
         res.sendStatus(500);
@@ -70,7 +73,7 @@ module.exports = function (app) {
 
 
     newProd[2] = new Product({
-      "id": 51301099,
+      "id": 15117729,
       "name": "LEGO Creator Mighty Dinosaurs 31058 Build It Yourself Dinosaur Set, Pterodactyl, Triceratops, T Rex Toy",
       "current_price": {
         "value": 11.99,
@@ -87,7 +90,7 @@ module.exports = function (app) {
 
 
     newProd[3] = new Product({
-      "id": 52943137,
+      "id": 16483589,
       "name": "So You Want to Talk About Race -  by Ijeoma Oluo (Hardcover)",
       "current_price": {
         "value": 18.36,
@@ -104,7 +107,7 @@ module.exports = function (app) {
 
 
     newProd[4] = new Product({
-      "id": 52997343,
+      "id": 16696652,
       "name": "Hidden Figures : The American Dream and the Untold Story of the Black Women Mathematicians Who Helped",
       "current_price": {
         "value": 22.48,
@@ -121,7 +124,7 @@ module.exports = function (app) {
 
 
     newProd[5] = new Product({
-      "id": 52091946,
+      "id": 16752456,
       "name": "LEGO&#174; Friends Sunshine Catamaran 41317",
       "current_price": {
         "value": 22.48,
@@ -138,7 +141,7 @@ module.exports = function (app) {
 
 
     newProd[6] = new Product({
-      "id": 51004752,
+      "id": 15643793,
       "name": "T-Rex Cookie Jar Stoneware Matte White - Threshold&#153;",
       "current_price": {
         "value": 19.99,
@@ -170,7 +173,7 @@ module.exports = function (app) {
 
     newProd[8] = new Product({
       "id": 14756360,
-      "name": "aCroix Sparkling Water Lemon - 8pk/12 fl oz Cans",
+      "name": "LaCroix Sparkling Water Lemon - 8pk/12 fl oz Cans",
       "current_price": {
         "value": 3.69,
         "currency_code": "USD"
@@ -193,11 +196,16 @@ module.exports = function (app) {
   })
 
   
-  // catchall for other routes
+  // catchalls for other routes
   app.all('/:x', function (req, res) {
     res.status(404).send('<p>Unfortunately the page: <strong>' + req.params.x + "</strong> cannot be found. <br/>Please review the documentation.</p>");
     return
   })
+  app.all('*', function (req, res) {
+    res.status(404).send('<p>Unfortunately the page cannot be found. <br/>Please review the documentation.</p>');
+    return
+  })
 
+  
 
 }
