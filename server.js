@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var routes = require('./routes/routes.js');
 var mongoose = require('mongoose');
-// var product = require('./routes/product'); // needed in routes?
 
 var app = express();
 
@@ -15,13 +14,13 @@ routes(app); // call the routes and send the app.
 var mongo_uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/myretail'
 mongoose.connect(mongo_uri, { useNewUrlParser: true });
 
-mongoose.connection.on('connected', function () {
-  console.log('Sweet connected to database', mongo_uri);
-});
+// mongoose.connection.on('connected', function () {
+//   console.log('Sweet connected to database', mongo_uri);
+// });
 
-mongoose.connection.on('error', function () {
-  console.log('Bad not connected to database', mongo_uri);
-});
+// mongoose.connection.on('error', function () {
+//   console.log('Bad not connected to database', mongo_uri);
+// });
 
 // /** -- ROUTES -- **/
 // app.use(express.static('public'));
