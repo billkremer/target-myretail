@@ -10,7 +10,7 @@ module.exports = function (app) {
       return;
     } // input validation -- makes sure the input product_id string is equivalent to an integer
 
-    Product.findOne({ id: req.params.product_id  }, 'id name current_price',function (err, product) { 
+    Product.findOne({ id: req.params.product_id  }, 'id name current_price -_id',function (err, product) { 
       if (err) {
         res.sendStatus(500);
         return;
