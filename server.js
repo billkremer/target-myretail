@@ -2,6 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var routes = require('./routes/routes.js');
 var mongoose = require('mongoose');
+mongoose.set('useCreateIndex', true);
+
 
 var app = express();
 

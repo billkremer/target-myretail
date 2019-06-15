@@ -111,6 +111,10 @@ module.exports = function (app) {
   app.put('/products/:product_id', function (req, res) {
     var product_id = req.params.product_id;
 
+    console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id));
+
+    console.log('id received - put', id);
+
     // first ensure all parts of sent, id, name, price info
 
 
@@ -120,9 +124,7 @@ module.exports = function (app) {
 
     // update db
 
-    console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id));
-
-    console.log('id received - put', id);
+  
 
 
 
@@ -148,11 +150,12 @@ module.exports = function (app) {
   // this is a secret route to populate the database
   app.post('/secret/newproducts/:p', function (req, res) {
     // TODO use .dotenv package to use a .env here
+    // TODO, this blows up if ran twice
     if (req.params.p !== 'thisisanexcellentroute') {
       res.status(401).send('Unauthorized');
-      return
+      return;
     }
-
+    try {
     var newProd = [];
     newProd[0] = new Product({
       "id": 13860428,
@@ -167,8 +170,9 @@ module.exports = function (app) {
     // https://www.target.com/p/the-big-lebowski-blu-ray/-/A-13860428
 
     newProd[0].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        return new Error('already done db error');
+      };
     });
 
 
@@ -184,8 +188,10 @@ module.exports = function (app) {
     // https://www.target.com/p/strider-14x-sport-balance-bike-easy-ride-pedal-kit-green/-/A-53256681
 
     newProd[1].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -201,8 +207,10 @@ module.exports = function (app) {
     // https://www.target.com/p/lego-creator-mighty-dinosaurs-31058-build-it-yourself-dinosaur-set-pterodactyl-triceratops-t-rex-toy/-/A-51301099
 
     newProd[2].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -218,8 +226,10 @@ module.exports = function (app) {
     // https://www.target.com/p/so-you-want-to-talk-about-race-by-ijeoma-oluo-hardcover/-/A-52943137
 
     newProd[3].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -235,8 +245,10 @@ module.exports = function (app) {
     // https://www.target.com/p/hidden-figures-the-american-dream-and-the-untold-story-of-the-black-women-mathematicians-who-helped/-/A-52997343
 
     newProd[4].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -252,8 +264,10 @@ module.exports = function (app) {
     // https://www.target.com/p/lego-174-friends-sunshine-catamaran-41317/-/A-52091946
 
     newProd[5].save(function (err) {
-      if (err) return handleError(err);
-      console.log('new product saved', newProd);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -269,7 +283,10 @@ module.exports = function (app) {
     // https://www.target.com/p/t-rex-cookie-jar-stoneware-matte-white-threshold-153/-/A-51004752
 
     newProd[6].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');; 
+      };
     });
 
 
@@ -284,7 +301,10 @@ module.exports = function (app) {
     // https://www.target.com/p/prince-prince-vinyl/-/A-51143245
 
     newProd[7].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -299,7 +319,10 @@ module.exports = function (app) {
     // https://www.target.com/p/lacroix-sparkling-water-lemon-8pk-12-fl-oz-cans/-/A-14756360
 
     newProd[8].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -314,7 +337,10 @@ module.exports = function (app) {
     // https://www.target.com/p/tcl-55-roku-4k-uhd-hdr-smart-tv-55s425/-/A-50480469
 
     newProd[9].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -329,7 +355,10 @@ module.exports = function (app) {
     // https://www.target.com/p/tcl-65-roku-4k-uhd-hdr-smart-tv-65s425/-/A-50939781
 
     newProd[10].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        return new Error('already done db error');;
+      };
     });
 
 
@@ -344,8 +373,20 @@ module.exports = function (app) {
     // https://www.target.com/p/nintendo-switch-pikachu-eevee-edition-with-pokemon-let-s-go-pikachu-bundle/-/A-54082168
 
     newProd[11].save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        // res.status(409).send(err);
+        console.log(err);
+        console.log(err.errmsg);
+
+        throw new Error(err.errmsg + ' already done db error');;
+      };
     });
+
+    } catch (e) {
+      console.log(e);
+      res.status(409).send(e.message);
+      return;
+    }
 
     let prod_ids = '';
     for (let i = 0; i < newProd.length-1; i++) {
@@ -358,14 +399,15 @@ module.exports = function (app) {
   })
 
   
+  
   // catchalls for other routes
   app.all('/:x', function (req, res) {
     res.status(404).send('<p>Unfortunately the page: <strong>' + req.params.x + "</strong> cannot be found. <br/>Please review the documentation.</p>");
-    return
+    return;
   })
   app.all('*', function (req, res) {
     res.status(404).send('<p>Unfortunately the page cannot be found. <br/>Please review the documentation.</p>');
-    return
+    return;
   })
 
   

@@ -20,4 +20,20 @@ https://myre-tail.herokuapp.com/
 <!-- does PUT need to verify name? what is actual input for PUT -->
 
 
-13860428, 53256681, 51301099, 52943137, 52997343, 52091946, 51004752, 51143245, 14756360, 50480469, 50939781, 54082168.
+https://myre-tail.herokuapp.com/products/13860428
+https://myre-tail.herokuapp.com/products/53256681
+https://myre-tail.herokuapp.com/products/51301099
+https://myre-tail.herokuapp.com/products/52943137
+https://myre-tail.herokuapp.com/products/52997343
+https://myre-tail.herokuapp.com/products/52091946
+https://myre-tail.herokuapp.com/products/51004752
+https://myre-tail.herokuapp.com/products/51143245
+https://myre-tail.herokuapp.com/products/14756360
+https://myre-tail.herokuapp.com/products/50480469
+https://myre-tail.herokuapp.com/products/50939781
+https://myre-tail.herokuapp.com/products/54082168
+
+
+todos:
+handle errors when duplicate ids are in POST route
+complete PUT route
