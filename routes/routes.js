@@ -1,31 +1,108 @@
 module.exports = function (app) {
+  const https = require("https");
 
-  var Product = require('../model/product');
+  const Product = require('../model/product');
 
   app.get('/products/:product_id', function (req, res) {
-    if (parseInt(req.params.product_id) != req.params.product_id) {
-      res.status('404').send('Product Id: ' + req.params.product_id + ' is not valid. Please check documentation.');
+    let product_id = req.params.product_id;
+
+    if (parseInt(product_id) != product_id) {
+      res.status('404').send( { "error": 'Product Id: ' + product_id + ' is not a valid id. Please check documentation.'} );
       return;
     } // input validation -- makes sure the input product_id string is equivalent to an integer
 
-    Product.findOne({ id: req.params.product_id  }, 'id name current_price -_id',function (err, product) { 
-      if (err) {
-        res.sendStatus(500);
-        return;
-      }
-      if (product == null) { 
-        res.status('404').send('Product: ' + req.params.product_id + ' not found.');
-        return;
-      } // null == undefined
+    let product_info = [];
 
-      product_to_send = { "id": product.id,
-                          "name": product.name,
-                          "current_price": product.current_price
-                        }; // reorders the parameters as requested by client
+    // get the info then send
+    (async () => {
+      product_info = await getProductInfo(product_id);
+
+      if (typeof product_info.error == 'string' ) {
+        res.status(404).send(product_info);
+        return;
+      } // if an error exists
+
+      let product_to_send = {
+        "id": product_id,
+        "name": product_info[0],
+        "current_price": product_info[1]
+      }; // reorders the parameters as requested by client
+
       res.send(product_to_send);
-    });
+      return;
+    })();
+    
+  }); // end of get
 
-  });
+
+  async function getProductInfo(product_id) {
+    let gotName = true;
+    let gotPrice = true;
+    let productNEWname = await getProductName(product_id)
+      .catch(() => gotName = false);
+    if (!gotName) { 
+      return { "error": "Name information is missing" }; 
+    }; // early return if name is missing
+
+    let productNEWprice = await getProductPrice(product_id)
+      .catch(() => gotPrice = false);
+    if (!gotPrice) {
+      return { "error": "Price information is missing" }; 
+    }; // early return if price is missing
+
+    return [productNEWname.product_description.title, productNEWprice];
+  };
+
+  let getProductName = function (product_id) {
+    var body = '';
+    let url = "https://redsky.target.com/v2/pdp/tcin/" + product_id + "?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics";
+
+    // get name from redsky
+    // https://www.valentinog.com/blog/http-requests-node-js-async-await/
+    // https://javascript.info/async-await
+    let product_name_promise = new Promise((resolve, reject) => {
+      https.get(url, (res) => {
+        res.setEncoding("utf8");
+        res.on("data", (data) => {
+          body += data;
+        });
+        res.on("end", () => {
+          try {
+            body = JSON.parse(body);
+            if (typeof body.product.item.product_description == 'undefined') {
+              reject(new Error('item name not found'));
+            } else {
+              resolve(body.product.item);
+            }
+          } catch (e) {
+            reject(new Error(e.message));
+          };
+        });
+      });
+    }); // end of product_name_promise
+
+    return product_name_promise;
+  };
+
+
+  // get price info from db
+  let getProductPrice = function (product_id) {
+    let product_price_promise = new Promise((resolve, reject) => {
+      Product.findOne({ id: product_id }, 'id current_price -_id', function (err, product) {
+        // console.log('here', product);
+        if (err) {
+          reject(new Error('500 db error'));
+        };
+        if (product == null) {
+          reject(new Error('404 Product: ' + product_id + ' price info not found.'));
+        }; // null == undefined
+        resolve(product.current_price);
+      });
+    });
+    return product_price_promise;
+  }
+    
+
 
 
 
@@ -44,6 +121,7 @@ module.exports = function (app) {
       }
   console.log(product)
       res.sendStatus(200);
+      return;
     });
   });
 
@@ -52,11 +130,17 @@ module.exports = function (app) {
 
 
   // this is a secret route to populate the database
-  app.get('/secret/newproducts/', function (req, res) {
+  app.post('/secret/newproducts/:p', function (req, res) {
+    // TODO use .dotenv package to use .env here
+    if (req.params.p !== 'thisisanexcellentroute') {
+      res.status(401).send('Unauthorized');
+      return
+    }
+
     var newProd = [];
-    newProd[1] = new Product({
+    newProd[0] = new Product({
       "id": 13860428,
-      "name": "The Big Lebowski (Blu-ray) (Widescreen)",
+      // "name": "The Big Lebowski (Blu-ray) (Widescreen)",
       "current_price": {
         "value": 13.49,
         "currency_code": "USD"
@@ -66,6 +150,23 @@ module.exports = function (app) {
     // { "id": 13860428, "name": "The Big Lebowski (Blu-ray) (Widescreen)", "current_price": { "value": 13.49, "currency_code": "USD" } }
     // https://www.target.com/p/the-big-lebowski-blu-ray/-/A-13860428
 
+    newProd[0].save(function (err) {
+      if (err) return handleError(err);
+      console.log('new product saved', newProd);
+    });
+
+
+    newProd[1] = new Product({
+      "id": 53256681,
+      // "name": "Strider 14x Sport Balance Bike + Easy - Ride Pedal Kit - Green",
+      "current_price": {
+        "value": 189.99,
+        "currency_code": "USD"
+      }
+    });
+
+    // https://www.target.com/p/strider-14x-sport-balance-bike-easy-ride-pedal-kit-green/-/A-53256681
+
     newProd[1].save(function (err) {
       if (err) return handleError(err);
       console.log('new product saved', newProd);
@@ -73,8 +174,8 @@ module.exports = function (app) {
 
 
     newProd[2] = new Product({
-      "id": 15117729,
-      "name": "LEGO Creator Mighty Dinosaurs 31058 Build It Yourself Dinosaur Set, Pterodactyl, Triceratops, T Rex Toy",
+      "id": 51301099,
+      // "name": "LEGO Creator Mighty Dinosaurs 31058 Build It Yourself Dinosaur Set, Pterodactyl, Triceratops, T Rex Toy",
       "current_price": {
         "value": 11.99,
         "currency_code": "USD"
@@ -90,8 +191,8 @@ module.exports = function (app) {
 
 
     newProd[3] = new Product({
-      "id": 16483589,
-      "name": "So You Want to Talk About Race -  by Ijeoma Oluo (Hardcover)",
+      "id": 52943137,
+      // "name": "So You Want to Talk About Race -  by Ijeoma Oluo (Hardcover)",
       "current_price": {
         "value": 18.36,
         "currency_code": "USD"
@@ -107,8 +208,8 @@ module.exports = function (app) {
 
 
     newProd[4] = new Product({
-      "id": 16696652,
-      "name": "Hidden Figures : The American Dream and the Untold Story of the Black Women Mathematicians Who Helped",
+      "id": 52997343,
+      // "name": "Hidden Figures : The American Dream and the Untold Story of the Black Women Mathematicians Who Helped",
       "current_price": {
         "value": 22.48,
         "currency_code": "USD"
@@ -124,10 +225,10 @@ module.exports = function (app) {
 
 
     newProd[5] = new Product({
-      "id": 16752456,
-      "name": "LEGO&#174; Friends Sunshine Catamaran 41317",
+      "id": 52091946,
+      // "name": "LEGO&#174; Friends Sunshine Catamaran 41317",
       "current_price": {
-        "value": 22.48,
+        "value": 69.99,
         "currency_code": "USD"
       }
     });
@@ -141,8 +242,8 @@ module.exports = function (app) {
 
 
     newProd[6] = new Product({
-      "id": 15643793,
-      "name": "T-Rex Cookie Jar Stoneware Matte White - Threshold&#153;",
+      "id": 51004752,
+      // "name": "T-Rex Cookie Jar Stoneware Matte White - Threshold&#153;",
       "current_price": {
         "value": 19.99,
         "currency_code": "USD"
@@ -158,7 +259,7 @@ module.exports = function (app) {
 
     newProd[7] = new Product({
       "id": 51143245,
-      "name": "Prince - Prince (Vinyl)",
+      // "name": "Prince - Prince (Vinyl)",
       "current_price": {
         "value": 18.98,
         "currency_code": "USD"
@@ -173,7 +274,7 @@ module.exports = function (app) {
 
     newProd[8] = new Product({
       "id": 14756360,
-      "name": "LaCroix Sparkling Water Lemon - 8pk/12 fl oz Cans",
+      // "name": "LaCroix Sparkling Water Lemon - 8pk/12 fl oz Cans",
       "current_price": {
         "value": 3.69,
         "currency_code": "USD"
@@ -186,10 +287,55 @@ module.exports = function (app) {
     });
 
 
+    newProd[9] = new Product({
+      "id": 50480469,
+      // "name": "TCL 55\" Roku 4K UHD HDR Smart TV (55S425)",
+      "current_price": {
+        "value": 329.99,
+        "currency_code": "USD"
+      }
+    });
+    // https://www.target.com/p/tcl-55-roku-4k-uhd-hdr-smart-tv-55s425/-/A-50480469
+
+    newProd[9].save(function (err) {
+      if (err) return handleError(err);
+    });
+
+
+    newProd[10] = new Product({
+      "id": 50939781,
+      // "name": "TCL 65\" Roku 4K UHD HDR Smart TV (65S425)",
+      "current_price": {
+        "value": 499.99,
+        "currency_code": "USD"
+      }
+    });
+    // https://www.target.com/p/tcl-65-roku-4k-uhd-hdr-smart-tv-65s425/-/A-50939781
+
+    newProd[10].save(function (err) {
+      if (err) return handleError(err);
+    });
+
+
+    newProd[11] = new Product({
+      "id": 54082168,
+      // "name": "Nintendo Switch Pikachu & Eevee Edition with Pokemon: Let's Go Pikachu! Bundle",
+      "current_price": {
+        "value": 399.99,
+        "currency_code": "USD"
+      }
+    });
+    // https://www.target.com/p/nintendo-switch-pikachu-eevee-edition-with-pokemon-let-s-go-pikachu-bundle/-/A-54082168
+
+    newProd[11].save(function (err) {
+      if (err) return handleError(err);
+    });
+
     let prod_ids = '';
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 0; i < newProd.length-1; i++) {
       prod_ids += newProd[i].id + ', ';
     }
+    prod_ids += newProd[newProd.length-1].id;
 
     res.status(201).send('Created Products: ' + prod_ids + '.');
     return;
