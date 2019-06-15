@@ -53,11 +53,11 @@ module.exports = function (app) {
     return [productNEWname.product_description.title, productNEWprice];
   };
 
+  // get name from redsky
   let getProductName = function (product_id) {
     var body = '';
     let url = "https://redsky.target.com/v2/pdp/tcin/" + product_id + "?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics";
 
-    // get name from redsky
     // https://www.valentinog.com/blog/http-requests-node-js-async-await/
     // https://javascript.info/async-await
     let product_name_promise = new Promise((resolve, reject) => {
@@ -89,14 +89,14 @@ module.exports = function (app) {
   let getProductPrice = function (product_id) {
     let product_price_promise = new Promise((resolve, reject) => {
       Product.findOne({ id: product_id }, 'id current_price -_id', function (err, product) {
-        // console.log('here', product);
         if (err) {
           reject(new Error('500 db error'));
         };
         if (product == null) {
           reject(new Error('404 Product: ' + product_id + ' price info not found.'));
+        } else {
+          resolve(product.current_price);
         }; // null == undefined
-        resolve(product.current_price);
       });
     });
     return product_price_promise;
@@ -110,11 +110,27 @@ module.exports = function (app) {
   // @TODO: Complete this route
   app.put('/products/:product_id', function (req, res) {
     var product_id = req.params.product_id;
+
+    // first ensure all parts of sent, id, name, price info
+
+
+    // get name from API based on id
+
+    // compare name ===
+
+    // update db
+
     console.log('inapp.get', typeof req.params.product_id, parseInt(req.params.product_id) == req.params.product_id, typeof parseInt(req.params.product_id));
 
     console.log('id received - put', id);
 
-    Product.findOneAndUpdate({id: product_id}, function (err, product) {
+
+
+
+    // Product Schema has 'unique' product id so can do this.
+    // https://mongoosejs.com/docs/api.html#query_Query-findOneAndUpdate
+    Product.findOneAndUpdate({id: product_id},
+       function (err, product) {
       if (err) {
         res.sendStatus(500);
         return;
@@ -131,7 +147,7 @@ module.exports = function (app) {
 
   // this is a secret route to populate the database
   app.post('/secret/newproducts/:p', function (req, res) {
-    // TODO use .dotenv package to use .env here
+    // TODO use .dotenv package to use a .env here
     if (req.params.p !== 'thisisanexcellentroute') {
       res.status(401).send('Unauthorized');
       return

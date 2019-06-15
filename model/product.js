@@ -3,7 +3,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ProductSchema = new Schema({
-  id: Number,
+  id: { 
+    type: Number,
+    unique: true
+  },
   name: String,
   current_price: { value: Number, 
                    currency_code: String }
