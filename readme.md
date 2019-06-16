@@ -20,14 +20,19 @@ https://myre-tail.herokuapp.com/
 ### JSON Results Format:
 #### Working Example
 All 
+
+```
 { "id":"51143245",
   "name":"Prince - Prince (Vinyl)",
   "current\_price":{"value":18.98,"currency\_code":"USD"}
   }
+```
 
 #### Non-working Example:
 If information is missing, json will have an "error" 
+```
 {"error":"Price information is missing"}
+```
 
 ### Links to Examples
 
@@ -56,10 +61,14 @@ If information is missing, json will have an "error"
 
 
 ### To Run This Repo Locally:
+
 1. $ git clone https://github.com/billkremer/target-myretail.git
 2. $ cd target-myretail
 2. $ npm install
+0. Start your local MongoDB server on port 27017
+0.1 Create a collection with the name: products
 3. $ npm start
+3.4 seed the database by POSTing to the secret URL
 4. navigate to [http://localhost:3000/products/](http://localhost:3000/products/)
 5. input working ids after the /products/ in the URL
 
