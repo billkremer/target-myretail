@@ -25,9 +25,9 @@ All fields have data.
 { 
   "id": "51143245",
   "name": "Prince - Prince (Vinyl)",
-  "current\_price": {
+  "current_price": {
     "value": 18.98,
-    "currency\_code": "USD"
+    "currency_code": "USD"
     }
 }
 ```
