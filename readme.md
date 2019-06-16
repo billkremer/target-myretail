@@ -55,7 +55,15 @@ If information is missing, json will have an "error"
 * https://myre-tail.herokuapp.com/products/76193181 Price information is missing
 
 
+### To Run This Repo Locally:
+1. $ git clone https://github.com/billkremer/target-myretail.git
+2. $ cd target-myretail
+2. $ npm install
+3. $ npm start
+4. navigate to [http://localhost:3000/products/](http://localhost:3000/products/)
+5. input working ids after the /products/ in the URL
+
+
 
 todos:
 * handle errors when duplicate ids are in POST route
-* complete PUT route

@@ -395,7 +395,7 @@ module.exports = function (app) {
       // };
     });
 
-    
+
     let prod_ids = '';
     for (let i = 0; i < newProd.length-1; i++) {
       prod_ids += newProd[i].id + ', ';
