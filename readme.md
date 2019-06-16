@@ -6,7 +6,7 @@ This is an end-to-end Proof-of-Concept for a products API, which will aggregate 
 Bill Kremer
 
 ### Technology Used:
-MongoDB, Express, Node
+[MongoDB](https://docs.mongodb.com/manual/), [Express](http://expressjs.com/), [Node.js](https://nodejs.org)
 
 ### Publication Date:
 June 12, 2019
