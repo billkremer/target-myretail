@@ -10,6 +10,8 @@ Bill Kremer
 
 Target Redsky API: https://redsky.target.com/v2/pdp/tcin/ + product_id
 
+[Heroku](https://www.heroku.com/) app platform with [mLab MongoDB](https://www.mlab.com/)
+
 ### Tools Used
 [Visual Studio Code](https://code.visualstudio.com/), [Robo 3T](https://www.robomongo.org), [Postman](https://www.getpostman.com/)
 
