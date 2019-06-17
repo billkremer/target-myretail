@@ -7,7 +7,7 @@ module.exports = function (app) {
     let product_id = req.params.product_id;
 
     if (parseInt(product_id) != product_id) {
-      res.status('404').send( { "error": 'Product Id: ' + product_id + ' is not a valid id.'} );
+      res.status('404').send({ "error": 'Product Id: ' + product_id + ' is not a valid id.'});
       return;
     } // input validation -- makes sure the input product_id string is equivalent to an integer
 
@@ -142,11 +142,11 @@ module.exports = function (app) {
               res.sendStatus(500);
               return;
             }
-            res.send({ success: 'Product price changed from: ' + product.current_price.value + ' to: ' + req.body.current_price.value});
+            res.send({ "success": 'Product price changed from: ' + product.current_price.value + ' to: ' + req.body.current_price.value});
             return;
           });
         } else {
-          res.status(404).send({ error: 'Product name mismatch.' });
+          res.status(404).send({ "error": 'Product name mismatch.' });
           return;
         };
       };       
@@ -161,7 +161,7 @@ module.exports = function (app) {
     // TODO use .dotenv package to use a .env here
     // TODO -- see TODO below.  consider rewriting to do a simple look first, then save if not present.
     if (req.params.p !== 'thisisanexcellentroute') {
-      res.status(401).send('Unauthorized');
+      res.status(401).send({"error":'Unauthorized'});
       return;
     }
 
@@ -319,7 +319,7 @@ module.exports = function (app) {
 
     } // end of for...of loop
 
-    res.status(201).send({'success':'Products: ' + prod_ids.join(', ') + ' are present.'});
+    res.status(201).send({"success":'Products: ' + prod_ids.join(', ') + ' are present.'});
     return;
     
   });
