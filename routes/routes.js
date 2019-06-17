@@ -1,7 +1,7 @@
 module.exports = function (app) {
   const https = require("https");
-
   const Product = require('../model/product');
+
 
   app.get('/products/:product_id', function (req, res) {
     let product_id = req.params.product_id;
@@ -53,7 +53,8 @@ module.exports = function (app) {
     return [productNEWname.product_description.title, productNEWprice];
   };
 
-  // get name from redsky
+
+  // get name from redsky API
   let getProductName = function (product_id) {
     var body = '';
     let url = "https://redsky.target.com/v2/pdp/tcin/" + product_id + "?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics,available_to_promise_network,deep_red_labels,esp";
@@ -103,15 +104,12 @@ module.exports = function (app) {
   }
     
 
-
   app.put('/products/:product_id', function (req, res) {
     var product_id = req.params.product_id;
     if (parseInt(product_id) != product_id) {
       res.status('404').send({ "error": 'Product Id: ' + product_id + ' is not a valid id.' });
       return;
     } // input validation -- makes sure the input product_id string is equivalent to an integer
-
-
 
     // ensure id in route == id in body)
     if (product_id != req.body.id) {
@@ -149,13 +147,11 @@ module.exports = function (app) {
           });
         } else {
           res.status(404).send({ error: 'Product name mismatch.' });
-            return;
+          return;
         };
       };       
     })();
-
   }); // end of PUT route
-
 
 
 
@@ -163,7 +159,7 @@ module.exports = function (app) {
   // this is a secret route to populate the database
   app.post('/secret/newproducts/:p', function (req, res) {
     // TODO use .dotenv package to use a .env here
-    // TODO, doesn't handle errors at all. consider a try/catch...
+    // TODO -- see TODO below.  consider rewriting to do a simple look first, then save if not present.
     if (req.params.p !== 'thisisanexcellentroute') {
       res.status(401).send('Unauthorized');
       return;
@@ -178,16 +174,8 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // { "id": 13860428, "name": "The Big Lebowski (Blu-ray) (Widescreen)", "current_price": { "value": 13.49, "currency_code": "USD" } }
     // https://www.target.com/p/the-big-lebowski-blu-ray/-/A-13860428
-
-    newProd[0].save(function (err) {
-      // if (err) {
-      //   return new Error('already done db error');
-      // };
-    });
-
 
     newProd[1] = new Product({
       "id": 53256681,
@@ -197,16 +185,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/strider-14x-sport-balance-bike-easy-ride-pedal-kit-green/-/A-53256681
-
-    newProd[1].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[2] = new Product({
       "id": 51301099,
@@ -216,16 +195,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/lego-creator-mighty-dinosaurs-31058-build-it-yourself-dinosaur-set-pterodactyl-triceratops-t-rex-toy/-/A-51301099
-
-    newProd[2].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[3] = new Product({
       "id": 52943137,
@@ -235,16 +205,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/so-you-want-to-talk-about-race-by-ijeoma-oluo-hardcover/-/A-52943137
-
-    newProd[3].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[4] = new Product({
       "id": 52997343,
@@ -254,16 +215,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/hidden-figures-the-american-dream-and-the-untold-story-of-the-black-women-mathematicians-who-helped/-/A-52997343
-
-    newProd[4].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[5] = new Product({
       "id": 52091946,
@@ -273,16 +225,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/lego-174-friends-sunshine-catamaran-41317/-/A-52091946
-
-    newProd[5].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[6] = new Product({
       "id": 51004752,
@@ -292,16 +235,7 @@ module.exports = function (app) {
         "currency_code": "USD"
       }
     });
-
     // https://www.target.com/p/t-rex-cookie-jar-stoneware-matte-white-threshold-153/-/A-51004752
-
-    newProd[6].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');; 
-      // };
-    });
-
 
     newProd[7] = new Product({
       "id": 51143245,
@@ -313,12 +247,6 @@ module.exports = function (app) {
     });
     // https://www.target.com/p/prince-prince-vinyl/-/A-51143245
 
-    newProd[7].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
 
 
     newProd[8] = new Product({
@@ -331,14 +259,6 @@ module.exports = function (app) {
     });
     // https://www.target.com/p/lacroix-sparkling-water-lemon-8pk-12-fl-oz-cans/-/A-14756360
 
-    newProd[8].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
-
     newProd[9] = new Product({
       "id": 50480469,
       // "name": "TCL 55\" Roku 4K UHD HDR Smart TV (55S425)",
@@ -348,14 +268,6 @@ module.exports = function (app) {
       }
     });
     // https://www.target.com/p/tcl-55-roku-4k-uhd-hdr-smart-tv-55s425/-/A-50480469
-
-    newProd[9].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
 
     newProd[10] = new Product({
       "id": 50939781,
@@ -367,14 +279,6 @@ module.exports = function (app) {
     });
     // https://www.target.com/p/tcl-65-roku-4k-uhd-hdr-smart-tv-65s425/-/A-50939781
 
-    newProd[10].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   return new Error('already done db error');;
-      // };
-    });
-
-
     newProd[11] = new Product({
       "id": 54082168,
       // "name": "Nintendo Switch Pikachu & Eevee Edition with Pokemon: Let's Go Pikachu! Bundle",
@@ -385,29 +289,42 @@ module.exports = function (app) {
     });
     // https://www.target.com/p/nintendo-switch-pikachu-eevee-edition-with-pokemon-let-s-go-pikachu-bundle/-/A-54082168
 
-    newProd[11].save(function (err) {
-      // if (err) {
-      //   // res.status(409).send(err);
-      //   console.log(err);
-      //   console.log(err.errmsg);
 
-      //   throw new Error(err.errmsg + ' already done db error');;
-      // };
-    });
+    var prod_ids = [];
+    let errors = [];
+    for (let element of newProd) {
+      let gotPrice = true;
+      (async () => {
+        let productNEWprice = await getProductPrice(element.id)
+          .then(() => { gotPrice = true; })
+          .catch(() => { gotPrice = false; });
+        if (gotPrice) {
+          return { "error": "already present" }; // early return if price is already there
+        } else {
+          try {
+            await element.save();
+            //     let value = await element.save({validateBeforeSave: true }, function (err) {
+            // //   if (err) {};
+            //     });
+            // console.log(value, 'value')
 
+          } catch (e) {
+            console.error(e);
+            await errors.push(e); // how to access later?
+          }
+        }; 
+      })()
 
-    let prod_ids = '';
-    for (let i = 0; i < newProd.length-1; i++) {
-      prod_ids += newProd[i].id + ', ';
-    }
-    prod_ids += newProd[newProd.length-1].id;
+      prod_ids.push(element.id);
 
-    res.status(201).send('Created Products: ' + prod_ids + '.');
+    } // end of for...of loop
+
+    res.status(201).send({'success':'Products: ' + prod_ids.join(', ') + ' are present.'});
     return;
-  })
+    
+  });
 
   
-
   // catchalls for other routes
   app.all('/:x', function (req, res) {
     res.status(404).send('<p>Unfortunately the page: <strong>' + req.params.x + "</strong> cannot be found. <br/>Please review the documentation.</p>");

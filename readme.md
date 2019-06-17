@@ -6,10 +6,15 @@ This is an end-to-end Proof-of-Concept for a products API, which will aggregate 
 Bill Kremer
 
 ### Technology Used:
-[MongoDB](https://docs.mongodb.com/manual/), [Express](http://expressjs.com/), [Node.js](https://nodejs.org)
+[MongoDB](https://docs.mongodb.com/manual/), [Express](http://expressjs.com/), [Node.js](https://nodejs.org),
+
+Target Redsky API: https://redsky.target.com/v2/pdp/tcin/ + product_id
+
+### Tools Used
+[Visual Studio Code](https://code.visualstudio.com/), [Robo 3T](https://www.robomongo.org), [Postman](https://www.getpostman.com/)
 
 ### Publication Date:
-June 12, 2019
+June 16, 2019
 
 ### URL:
 https://myre-tail.herokuapp.com/
@@ -33,7 +38,7 @@ All fields have data.
 ```
 
 #### Non-working Example:
-If information is missing, json will have an "error" 
+If information is missing, json will have an "error" field
 ```
 {
   "error": "Price information is missing"
@@ -64,20 +69,26 @@ If information is missing, json will have an "error"
 * https://myre-tail.herokuapp.com/products/16483589 Name information is missing
 * https://myre-tail.herokuapp.com/products/47717069 Price information is missing
 * https://myre-tail.herokuapp.com/products/76193181 Price information is missing
-
+(These could change depending on the Redsky API)
 
 ### How To Run This Repo Locally:
-
 1. `$ git clone https://github.com/billkremer/target-myretail.git`
 2. `$ cd target-myretail`
 3. `$ npm install`
 4. Start your local MongoDB server on port 27017. `$ mongod`
-5. In your database tool, [create a collection](https://docs.mongodb.com/manual/reference/method/db.createCollection/) with the name: products `db.createCollection('products')`
+5. In your [database tool](www.robomongo.org), [create a collection](https://docs.mongodb.com/manual/reference/method/db.createCollection/) with the name: "products" `db.createCollection('products')`
 6. `$ npm start`
-7. Seed the database by POSTing to the secret route `/secret/newproducts/thisisanexcellentroute`
-8. Navigate to [http://localhost:3000/products/](http://localhost:3000/products/)
-9. Input working ids after the `/products/` in the URL
-10. Update prices by using a PUT route `/products/[product id]` with the 'Working JSON' example above and the updated price. 
+7. Navigate to [http://localhost:3000/products/](http://localhost:3000/products/)
+8. Seed the database by a POST to the [secret route](http://localhost:3000/secret/newproducts/thisisanexcellentroute)
+
+
+### To Get the Product Information 
+1a\. Input working ids after the `/products/` in the URL in a web browser
+OR
+1b\. Use curl or Postman (or similar API Development Environment) to make a GET call to the URL with the working id after the `/products/`.
+
+### To Update The Product Pricing
+1. Use curl or Postman (or similar API Development Environment) to make a PUT call to the URL with the working id after the `/products/`. In the body of the PUT include the same information as you would get from the Product information call with an updated price.
 
 
 
