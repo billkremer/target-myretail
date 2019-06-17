@@ -71,12 +71,12 @@ If information is missing, json will have an "error" field
 * https://myre-tail.herokuapp.com/products/76193181 Price information is missing
 (These could change depending on the Redsky API)
 
-### How To Run This Repo Locally:
+### How to Run this Repo Locally:
 1. `$ git clone https://github.com/billkremer/target-myretail.git`
 2. `$ cd target-myretail`
 3. `$ npm install`
 4. Start your local MongoDB server on port 27017. `$ mongod`
-5. In your [database tool](www.robomongo.org), [create a collection](https://docs.mongodb.com/manual/reference/method/db.createCollection/) with the name: "products" `db.createCollection('products')`
+5. In your [database tool](https://www.robomongo.org), [create a collection](https://docs.mongodb.com/manual/reference/method/db.createCollection/) with the name: "products" `db.createCollection('products')`
 6. `$ npm start`
 7. Navigate to [http://localhost:3000/products/](http://localhost:3000/products/)
 8. Seed the database by a POST to the [secret route](http://localhost:3000/secret/newproducts/thisisanexcellentroute)
@@ -87,13 +87,8 @@ If information is missing, json will have an "error" field
 OR
 1b\. Use curl or Postman (or similar API Development Environment) to make a GET call to the URL with the working id after the `/products/`.
 
-### To Update The Product Pricing
+### To Update the Product Pricing
 1. Use curl or Postman (or similar API Development Environment) to make a PUT call to the URL with the working id after the `/products/`. In the body of the PUT include the same information as you would get from the Product information call with an updated price.
 
 
-
-#### TODOs:
-
-* Handle errors when duplicate ids are in POST route instead of ignoring
-* Consider a documentation page with route
 
