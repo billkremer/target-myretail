@@ -93,4 +93,6 @@ OR
 1. Use curl or Postman (or similar API Development Environment) to make a PUT call to the URL with the working id after the `/products/`. In the body of the PUT include the same information as you would get from the Product information call with an updated price.
 
 
-
+### Future Goals / TODOs
+* Separate the logic out of the routing into the Model or their own services or controllers.
+* Error checking is missing when the Redsky API is not available. (wrap GET in try/catch)
